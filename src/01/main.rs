@@ -4,10 +4,14 @@
 #![cfg_attr(debug_assertions, allow(unused_variables))]
 
 use std::fs::File;
-use std::io::{self, BufReader, BufRead};
+use std::io::{self, BufReader, BufRead, Error, ErrorKind};
 
-fn add_safe(a: u32, b: u32) -> Result<u32, &'static str> {
-    a.checked_add(b).ok_or("Addition would overflow!")
+fn add_safe(a: u32, b: u32) -> Result<u32, Error> {
+    a.checked_add(b)
+        .ok_or_else(|| Error::new(
+            ErrorKind::Other,
+            "Overflow detected!"
+        ))
 }
 
 fn distance(a: u32,b: u32) -> u32 {
@@ -46,12 +50,7 @@ fn main() -> io::Result<()> {
     let mut diff: u32 = 0;
 
     for (itema, itemb) in lista.iter().zip(listb.iter()) {
-        diff = match add_safe(diff, distance(*itema, *itemb)) {
-            Ok(value) => value,
-            Err(e) => {
-                panic!("Overflow error: {}", e);
-            }
-        }
+        diff = add_safe(diff, distance(*itema, *itemb))?;
     }
 
     println!("Difference Score: {}", diff);
@@ -62,12 +61,7 @@ fn main() -> io::Result<()> {
         let occurances: u32 = listb.iter().fold(0, |acc, &x| acc + (x == *itema) as u32);
 
         let addend = occurances * *itema;
-        sim = match add_safe(sim, addend) {
-            Ok(value) => value,
-            Err(e) => {
-                panic!("Overflow error: {}", e);
-            }
-        }
+        sim = add_safe(sim, addend)?;
     }
 
     println!("Similarity Score: {}", sim);
