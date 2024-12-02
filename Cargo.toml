@@ -7,4 +7,8 @@ edition = "2021"
 name = "AOC202401"
 path = "src/01/main.rs"
 
+[[bin]]
+name = "AOC202402"
+path = "src/02/main.rs"
+
 [dependencies]
