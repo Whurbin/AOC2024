@@ -15,5 +15,9 @@ path = "src/02/main.rs"
 name = "AOC202403"
 path = "src/03/main.rs"
 
+[[bin]]
+name = "AOC202404"
+path = "src/04/main.rs"
+
 [dependencies]
 regex = "1.11.1"
